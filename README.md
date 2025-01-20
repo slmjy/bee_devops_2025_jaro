@@ -1,4 +1,5 @@
-# [Informace o mně](https://drenkys.github.io/Tom-Drenko/)
+# Informace o mně
+[Personal page](https://drenkys.github.io/Tom-Drenko/)
 
 ## Co bych se rád naučil na kurzu?
 - Naučit se ovládat linux na vyšší úrovni než jsou základní příkazy a porozumět mu

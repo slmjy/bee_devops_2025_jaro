@@ -2,4 +2,5 @@
 
 1 Ukol:
 
-udelat pull request
+- udelat pull request
+- napsat info o sobe a co se chcete naucit na tomto kurzu

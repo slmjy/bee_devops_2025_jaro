@@ -1,4 +1,5 @@
 # bee_devops_2025_jaro
+
 ## O mě
 Jsem programátor a administrátor ICT systémů a aplikací. Vystudoval jsem Fakultu informatiky na Univerzitě Hradec Králové.
 

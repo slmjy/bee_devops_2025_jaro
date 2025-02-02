@@ -1,8 +1,8 @@
 #!/bin/bash
 
-echo "==============================================="
-echo "               Domácí úkol - lekce 3           "
-echo "==============================================="
+echo "================================================="
+echo "               Domácí úkol - lekce 3             "
+echo "================================================="
 
 # Základní informace o operačním systému
 echo "Název operačního systému: $(uname -s)"

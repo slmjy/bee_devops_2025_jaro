@@ -1,9 +1,10 @@
 #!/bin/bash
 
-# Výpis názvu operačního systému
 echo "==============================================="
-echo "               System Information              "
+echo "               Domácí úkol - lekce 3           "
 echo "==============================================="
+
+# Základní informace o operačním systému
 echo "Název operačního systému: $(uname -s)"
 echo "Verze operačního systému: $(uname -v)"
 echo "Verze kernelu: $(uname -r)"

@@ -26,3 +26,5 @@ echo "-----------------------------------------------"
 
 # Informace o IP adrese
 echo -e "Aktuální IP adresa: \n$(ipconfig.exe | grep 'IPv4')"
+echo
+read -p "Stiskněte ENTER pro ukončení."

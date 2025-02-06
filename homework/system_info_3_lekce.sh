@@ -40,4 +40,3 @@ elif [[ "$ANSWER" ==  "n" || "$ANSWER" == "N" ]]; then
 else
 	echo
 	echo "ERROR !!! Nepovolená odpověď."
-fi

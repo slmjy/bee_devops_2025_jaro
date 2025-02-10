@@ -1,50 +1,50 @@
 #!/bin/bash
 
-# Skript pro zjištìní informací o operaèním systému
+# Skript pro zjisteni informaci o operacnim systemu
 
-echo "======= Informace o systému ======="
+echo "======= Informace o systemu ======="
 
-# Název stroje
-echo "Název stroje: $(hostname)"
+# Nazev stroje
+echo "Nazev stroje: $(hostname)"
 
 # Verze OS a distribuce
 if [ -f /etc/os-release ]; then
   source /etc/os-release
-  echo "Operaèní systém: $PRETTY_NAME"
+  echo "Operacni system: $PRETTY_NAME"
 else
-  echo "Operaèní systém: Nelze zjistit"
+  echo "Operacni system: Nelze zjistit"
 fi
 
-# Verze jádra
-echo "Verze jádra: $(uname -r)"
+# Verze jadra
+echo "Verze jadra: $(uname -r)"
 
 # Architektura
 echo "Architektura: $(uname -m)"
 
-# Doba bìhu systému
-echo -n "Doba od spuštìní: "
+# Doba behu systemu
+echo -n "Doba od spusteni: "
 uptime -p | sed 's/up //'
 
 # Procesor
 echo "Procesor: $(grep 'model name' /proc/cpuinfo | head -1 | cut -d':' -f2 | sed 's/^ //')"
-echo "Poèet jader: $(nproc)"
+echo "Pocet jader: $(nproc)"
 
-# Vyuití pamìti
-echo "Pamì RAM:"
-free -h | grep Mem | awk '{print "Celkem: " $2 ", Vyuito: " $3 ", Volné: " $4}'
+# Vyuziti pameti
+echo "PameÅ¥ RAM:"
+free -h | grep Mem | awk '{print "Celkem: " $2 ", Vyuzito: " $3 ", Volne: " $4}'
 
-# Místo na disku
-echo -e "\nMísto na discích:"
+# Misto na disku
+echo -e "\nMisto na discich:"
 df -h --output=source,target,pcent,avail | grep -v 'tmpfs\|udev\|loop'
 
-# Síová rozhraní
-echo -e "\nSíová rozhraní:"
+# SiÅ¥ova rozhrani
+echo -e "\nSiÅ¥ova rozhrani:"
 ip -brief address | awk '{print $1 " | IP: " $3}'
 
-# Pøihlášení uivatelé
-echo -e "\nAktivní uivatelé:"
+# PÅ™ihlaseni uzivatele
+echo -e "\nAktivni uzivatele:"
 who
 
-# Nároèné procesy
-echo -e "\nNejnároènìjší procesy (CPU):"
+# Narocne procesy
+echo -e "\nNejnarocnejsi procesy (CPU):"
 ps aux --sort=-%cpu | head -n 6 | awk '{print $1, $2, $3"%", $4"%", $11}' | column -t

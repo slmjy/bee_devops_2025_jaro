@@ -2,13 +2,13 @@ DIRECTORY="$HOME/homework"
 FILE="$DIRECTORY/answers.txt"
 
 mkdir -p "$DIRECTORY"
-touch -f "$FILE"
-echo
 
 if [ ! -d "$DIRECTORY" ]; then
     echo "Error: Directory was not created!"
     exit 1
 fi
+
+touch -f "$FILE"
 
 PATH_SOFT="/tmp/answer_soft_hw"
 

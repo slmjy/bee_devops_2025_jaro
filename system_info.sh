@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Skript pro zobrazení informací o zařízení
+# Skript pro zobrazení informací o zařízení Úkol č. 1-2
 
 # Funkce pro oddělovač
 separator() {
@@ -31,3 +31,18 @@ separator
 echo "Přihlášený uživatel: $User"
 echo "Vytvořil: $Author"
 separator
+
+# Úkol č. 3
+
+echo "Vytvářím složku a soubor..."
+mkdir -p ~/bee-it/bee_devops_2025_jaro/vytvorena-slozka
+echo "Text vložený pomocí příkazu. Pro úkol č. 3" > ~/bee-it/bee_devops_2025_jaro/vytvorena-slozka/novy-soubor.txt
+echo "Složka a soubor byly vytvořeny."
+
+echo "Vytvářím soft link..."
+ln -s ~/bee-it/bee_devops_2025_jaro/vytvorena-slozka/novy-soubor.txt ~/bee-it/bee_devops_2025_jaro/novy-soubor-soft.txt
+echo "Soft link byl vytvořen."
+
+echo "Vytvářím hard link..."
+ln ~/bee-it/bee_devops_2025_jaro/vytvorena-slozka/novy-soubor.txt ~/bee-it/bee_devops_2025_jaro/novy-soubor-hard.txt
+echo "Hard link byl vytvořen."

@@ -2,19 +2,36 @@ DIRECTORY="$HOME/homework"
 FILE="$DIRECTORY/answers.txt"
 
 mkdir -p "$DIRECTORY"
+touch -f "$FILE"
 echo
 
-if [ ! -e /tmp/answers_soft ]; then
-	ln -s "$FILE" /tmp/answers_soft_link.txt
-else
-	echo "Soft link již existuje."
+if [ ! -d "$DIRECTORY" ]; then
+    echo "Error: Directory was not created!"
+    exit 1
 fi
 
+PATH_SOFT="/tmp/answer_soft_hw"
 
-if [ ! -e /tmp/answers_hard ]; then
-	ln "$FILE" /tmp/answers_hard_link.txt
+if [ -e "${PATH_SOFT}" ]; then
+	if [ -L ${PATH_SOFT} ]; then
+		echo "Soft link is already exists."
+	else
+	echo "Soft link is already exists but it is not a link."
+	rm -f "$PATH_SOFT"
+	ln -s "$FILE" "$PATH_SOFT"
+	fi
 else
-	echo "Hard link již existuje."
+	ln -s "$FILE" "$PATH_SOFT"
+	echo "Soft link was created: $PATH_SOFT"
+fi
+
+PATH_HARD="/tmp/answer_hard_hw"
+
+if [ -e "${PATH_HARD}" ]; then
+	echo "Hard link is already exists."
+else
+	ln "$FILE" "$PATH_HARD"
+	echo "Hard link was created: $PATH_HARD"
 fi
 
 

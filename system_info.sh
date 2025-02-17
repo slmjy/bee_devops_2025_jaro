@@ -1,48 +1,110 @@
 #!/bin/bash
 
-# Skript pro zobrazení informací o zařízení Úkol č. 1-2
-
 # Funkce pro oddělovač
 separator() {
     echo "---------------------------------------------"
 }
 
-# Získání informací o systému
-OsName=$(lsb_release -d | cut -f2)  # Získá název a verzi OS
-Kernel=$(uname -r)                  # Verze jádra
-UpTime=$(uptime -p | sed 's/up //') # Doba běhu systému (bez "up")
-CPU=$(grep -m 1 "model name" /proc/cpuinfo | cut -d':' -f2 | xargs)  # Model CPU
-User=$(whoami)                      # Přihlášený uživatel
-Author=$(echo "Tomáš Drenko")       # Autor
+# Funkce pro zobrazení nápovědy
+show_help() {
+    echo "Použití: $0 [příkazy]"
+    echo "Příkazy:"
+    echo "  -d <cesta>       Vytvoří adresář na zadané cestě."
+    echo "  -f <cesta>       Vytvoří soubor na zadané cestě (nepřepíše existující)."
+    echo "  -s <zdroj> <cíl> Vytvoří soft link (zkontroluje existenci zdroje)."
+    echo "  -h <zdroj> <cíl> Vytvoří hard link (zkontroluje existenci zdroje)."
+    echo "  -i               Zobrazí informace o systému."
+    exit 1
+}
 
-# Výpis informací
-echo "=== Informace o systému ==="
-separator
-echo "Operační systém: $OsName"
-echo "Verze jádra: $Kernel"
-echo "Doba běhu systému: $UpTime"
-separator
-echo "=== Informace o CPU ==="
-separator
-echo "Model CPU: $CPU"
-separator
-echo "=== Informace o uživateli ==="
-separator
-echo "Přihlášený uživatel: $User"
-echo "Vytvořil: $Author"
-separator
+# Funkce pro zobrazení informací o systému
+show_sys_info() {
+    echo "=== Informace o systému ==="
+    separator
+    echo "Operační systém: $(lsb_release -d | cut -f2)"
+    echo "Verze jádra: $(uname -r)"
+    echo "Doba běhu systému: $(uptime -p | sed 's/up //')"
+    separator
+    echo "=== Informace o CPU ==="
+    separator
+    echo "Model CPU: $(grep -m 1 "model name" /proc/cpuinfo | cut -d':' -f2 | xargs)"
+    separator
+    echo "=== Informace o uživateli ==="
+    separator
+    echo "Přihlášený uživatel: $(whoami)"
+    echo "Vytvořil: Tomáš Drenko"
+    separator
+}
 
-# Úkol č. 3
+# Funkce pro vytvoření adresáře
+create_directory() {
+    local path=$1
+    if mkdir -p "$path"; then
+        echo "Adresář byl úspěšně vytvořen: $path"
+    else
+        echo "Chyba: Nelze vytvořit adresář $path." >&2
+        exit 1
+    fi
+}
 
-echo "Vytvářím složku a soubor..."
-mkdir -p ~/bee-it/bee_devops_2025_jaro/vytvorena-slozka
-echo "Text vložený pomocí příkazu. Pro úkol č. 3" > ~/bee-it/bee_devops_2025_jaro/vytvorena-slozka/novy-soubor.txt
-echo "Složka a soubor byly vytvořeny."
+# Funkce pro vytvoření souboru (nepřepíše existující)
+create_file() {
+    local path=$1
+    if [[ -e "$path" ]]; then
+        echo "❗ Soubor již existuje: $path"
+    else
+        if echo "Text vložený pomocí příkazu." > "$path"; then
+            echo "Soubor byl úspěšně vytvořen: $path"
+        else
+            echo "Chyba: Nelze vytvořit soubor $path." >&2
+            exit 1
+        fi
+    fi
+}
 
-echo "Vytvářím soft link..."
-ln -s ~/bee-it/bee_devops_2025_jaro/vytvorena-slozka/novy-soubor.txt ~/bee-it/bee_devops_2025_jaro/novy-soubor-soft.txt
-echo "Soft link byl vytvořen."
+# Funkce pro vytvoření soft linku
+create_soft_link() {
+    local source=$1
+    local dest=$2
+    if [[ ! -e "$source" ]]; then
+        echo "Chyba: Zdrojový soubor/adresář neexistuje: $source" >&2
+        exit 1
+    fi
+    if ln -s "$source" "$dest"; then
+        echo "Soft link byl úspěšně vytvořen: $dest -> $source"
+    else
+        echo "Chyba: Nelze vytvořit soft link $dest -> $source." >&2
+        exit 1
+    fi
+}
 
-echo "Vytvářím hard link..."
-ln ~/bee-it/bee_devops_2025_jaro/vytvorena-slozka/novy-soubor.txt ~/bee-it/bee_devops_2025_jaro/novy-soubor-hard.txt
-echo "Hard link byl vytvořen."
+# Funkce pro vytvoření hard linku
+create_hard_link() {
+    local source=$1
+    local dest=$2
+    if [[ ! -f "$source" ]]; then
+        echo "Chyba: Zdrojový soubor neexistuje nebo není regulérní soubor: $source" >&2
+        exit 1
+    fi
+    if ln "$source" "$dest"; then
+        echo "Hard link byl úspěšně vytvořen: $dest -> $source"
+    else
+        echo "Chyba: Nelze vytvořit hard link $dest -> $source." >&2
+        exit 1
+    fi
+}
+
+# Zpracování argumentů pomocí getopts
+while getopts ":d:f:s:h:i" opt; do
+    case ${opt} in
+        d) create_directory "$OPTARG" ;;
+        f) create_file "$OPTARG" ;;
+        s) create_soft_link "$OPTARG" "${!OPTIND}"; shift ;;  
+        h) create_hard_link "$OPTARG" "${!OPTIND}"; shift ;;  
+        i) show_sys_info ;;
+        \?) echo "Neznámý příkaz: -$OPTARG" >&2; show_help ;;
+        :) echo "Chyba: Argument pro -$OPTARG chybí" >&2; show_help ;;
+    esac
+done
+
+exit 0

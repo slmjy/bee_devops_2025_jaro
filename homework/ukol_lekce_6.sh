@@ -1,15 +1,54 @@
 #!/bin/bash
 
+echo
+echo "======================================================================================="
+echo "                           Informace o tvém síťovém rozhraní                           "
+echo "======================================================================================="
+echo
+
+ETH="$(ifconfig | grep -i -m 1 "eth0")"
+echo $ETH
+echo
+echo -e "$(ifconfig | grep -oP 'mtu \K\d+' | awk '{print "mtu:\t\t" $0}')"
+echo
+echo -e "$(ifconfig | grep -oP 'inet \K\d+\.\d+\.\d+\.\d+' | awk '{print "IP4v:\t\t" $0}')"
+echo
+echo -e "$(ifconfig | grep -oP 'netmask \K\d+\.\d+\.\d+\.\d+' | awk '{print "Netmask:\t" $0}')"
+echo
+echo -e "$(ifconfig | grep -oP 'broadcast \K\d+\.\d+\.\d+\.\d+' | awk '{print "Broadcast:\t" $0}')"
+echo
+echo -e "$(ifconfig | grep -m 1 -oP 'inet6 \K([0-9A-Fa-f:]+)' | awk '{print "IP6v:\t\t" $0}')"
+echo
+# -oP = vrátí pouze nalezené odpovídající části řádku (ne celý ř) a P umožní \K
+# \K = zahodí vše co je před ether
+# [0-9A-Fa-f] = regulární výraz, který odpovídá hexadecimalnimu znaku
+# {2} = přesně 2 znaky
+# [:-] = bude oddělený dvojtečkou nebo pomlčkou
+# {5} = najde prvních 5 bloků
+# na konci přidám ještě jednou regularni vyraz kdyby byla mac adresa delsi nez 5 hegadecimalnich znaku
+# {0} = u printu pouzijeme prvni vyraz (je prvni protoze jsme pouzili \K ktery zahodil ether)
+echo -e "$(ifconfig | grep -oP 'ether \K([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}' | awk '{print "MAC adresa:\t" $0}')"
+echo
+echo "======================================================================================="
+echo "======================================================================================="
+echo
+timeout -s SIGINT 10 ping google.com
+echo
+echo "======================================================================================="
+echo "                              Výsledky spuštění skriptu                                "
+echo "======================================================================================="
+
+
 
 # FUNKCE - Nápověda
 
 show_help () {
-    echo "-------------------------------------------------------------------------------------------------------------------"
-	echo -e "\nSpuštění souboru: \t\t\t\t\t\t$0"
-    echo -e "\nZvolení operace: \t\t\t\t\t\tdirMake"
-    echo -e "\nNásledně je nutné zvolit cestu, kam bude adresář vytvořen: \ttmp/nazev_slozky"
-    echo -e "\nJako poslední musíš pojmenovat soubor: \t\t\t\tnazev.sh"
-    echo -e "\nVzorový příkaz musí vypadat takto: \t\t\t\t$0 dirMake /tmp/nova_slozka nazev_souboru"
+    echo "======================================================================================="
+	echo -e "\nSpuštění souboru: \t$0"
+    echo -e "\nZvolení operace: \tdirMake"
+    echo -e "\nCesta adresáře: \ttmp/nazev_slozky"
+    echo -e "\nPojmenování souboru: \tnazev.sh"
+    echo -e "\nVzorový příkaz: \t$0 dirMake /tmp/nova_slozka nazev_souboru"
 	echo
 }
 
@@ -17,7 +56,7 @@ show_help () {
 # FUNKCE - Chceš nápovědu ?
 
 answer () {
-    echo -e "\nAhoj, pro správné chování skriptu musíš postupovat podle jasného zadání. Chceš získat více informací? [y/n]"
+    echo -e "\nAhoj, pro správné chování skriptu musíš postupovat podle jasného zadání.\nChceš získat více informací? [y/n]"
     read -s -n 1 ANSWER
     echo
         if [[ "$ANSWER" == "y" || "$ANSWER" == "Y" ]]; then
@@ -77,7 +116,7 @@ else
 # Výpis názvu operačního systému
 echo
 echo "==============================================="
-echo "               System Information              "
+echo "               Systémové informace             "
 echo "==============================================="
 echo "Název operačního systému: \$(uname -s)"
 echo "Verze operačního systému: \$(uname -v)"
@@ -100,7 +139,8 @@ echo "-----------------------------------------------"
 
 # Informace o IP adrese
 echo -e "Aktuální IP adresa: \n\$(ipconfig.exe | grep 'IPv4')"
-echo
+echo ping beeit.cz
+echo nslookup beeit.cz
 EOF
                     else
                         echo -e "\nERROR: Nepodařilo se vytvořit soubor '$3'."

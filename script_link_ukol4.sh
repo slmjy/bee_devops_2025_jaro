@@ -19,7 +19,7 @@ echo "Automaticky zapsany retezec" > "$dir_name/$file_name"
 ln -s "$(pwd)/$dir_name/$file_name" "$soft_link"
 
 # Vytvoreni hard linku
-ln "$dir_name/$file_name" "$hard_link"
+ln "$(pwd)/$dir_name/$file_name" "$hard_link"
 
 # Vypis potvrzeni
 echo "Slozka a soubor vytvoreny v '$dir_name'."

@@ -13,6 +13,8 @@ display_help() {
   echo "  -r, --folder <path> Specify folder for file creation"
   echo "  -f, --file <name>   Specify file name (created inside folder from -r)"
   echo "  -l, --links <path>  Specify directory for links"
+  echo "  -n, --netInfo       Display network information"
+  echo "  -t, --netTest       Perform network test"
   echo "  -h, --help          Display this help message"
   exit 0
 }
@@ -30,20 +32,42 @@ folder=""
 filename=""
 links_dir=""
 
+
+net_info() {
+  INTERFACE=$(ip route | awk '/default/ {print $5}')
+  IPV4_ADDR=$(ip -o -4 addr show "$INTERFACE" | awk '{print $4}' | cut -d/ -f1)
+  IPV6_ADDR=$(ip -o -6 addr show "$INTERFACE" scope global | awk '{print $4}' | cut -d/ -f1 | head -n1)
+  MAC_ADDR=$(cat /sys/class/net/"$INTERFACE"/address)
+
+  echo "Network Interface: $INTERFACE"
+  echo "IPv4 Address: $IPV4_ADDR"
+  echo "IPv6 Address: $IPV6_ADDR"
+  echo "MAC Address: $MAC_ADDR"
+}
+
+net_test() {
+  TARGET="google.cz" 
+  echo "Pinging $TARGET..."
+
+  if ping -c 1 "$TARGET" &>/dev/null; then
+    echo "Network test successful: $TARGET is reachable."
+  else
+    echo "Network test failed: $TARGET is unreachable."
+  fi
+}
+
+
 while [[ $# -gt 0 ]]; do
   case "$1" in
     -u|--uptime) echo "Uptime: $(uptime)"; shift;;
-    -d|--distroname) DISTRONAME=$(lsb_release -d | awk -F"\t" '{print $2}'); echo "Distribution: $DISTRONAME"; shift;;
+    -d|--distroname) DISTRONAME=$(lsb_release -d | awk -F: '{print $2}' | tr -d '[:space:]'); echo "Distribution: $DISTRONAME"; shift;;
     -v|--kernel-version) echo "Kernel version: $(uname -r)"; shift;;
     -a|--architecture) echo "Architecture: $(uname -m)"; shift;;
-    -m|--memory)
-      TOTALMEM=$(free -m | awk '/Mem:/ {print $2}')
-      FREEMEM=$(free -m | awk '/Mem:/ {print $4}')
-      echo "Total memory: ${TOTALMEM} MiB"
-      echo "Free memory: ${FREEMEM} MiB"
-      shift;;
+    -m|--memory) TOTALMEM=$(free -m | awk '/Mem:/ {print $2}'); FREEMEM=$(free -m | awk '/Mem:/ {print $4}'); echo "Total memory: ${TOTALMEM}MB"; echo "Free memory: ${FREEMEM}MB"; shift;;
     -s|--user) echo "Current user: $(whoami)"; shift;;
-    -r|--folder)
+    -n|--netInfo) net_info; shift;;
+    -t|--netTest) net_test; shift;;
+    -r|--folder) 
       if [[ -z "$2" ]]; then
         echo "Error: Option $1 requires an argument."
         exit 1
@@ -54,7 +78,7 @@ while [[ $# -gt 0 ]]; do
         echo "Error: Option $1 requires an argument."
         exit 1
       fi
-      filename="$2"; shift 2;;
+      file="$2"; shift 2;;
     -l|--links)
       if [[ -z "$2" ]]; then
         echo "Error: Option $1 requires an argument."
@@ -65,6 +89,7 @@ while [[ $# -gt 0 ]]; do
     *) echo "Invalid option: $1"; exit 1;;
   esac
 done
+
 
 # Aall three parameters (-r, -f, -l) must be provided together
 if [[ -n "$folder" || -n "$filename" || -n "$links_dir" ]]; then

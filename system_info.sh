@@ -14,6 +14,8 @@ show_help() {
     echo "  -s <zdroj> <cíl> Vytvoří soft link (zkontroluje existenci zdroje)."
     echo "  -h <zdroj> <cíl> Vytvoří hard link (zkontroluje existenci zdroje)."
     echo "  -i               Zobrazí informace o systému."
+    echo "  -n               Zobrazí informace o síťových rozhraních."
+    echo "  -t               Provede test spojení s beeit.cz."
     exit 1
 }
 
@@ -94,14 +96,39 @@ create_hard_link() {
     fi
 }
 
+# Funkce pro zobrazení informací o síťových rozhraních
+netInfo() {
+    echo "=== Informace o síťových rozhraních ==="
+    separator
+    echo "Síťová rozhraní:"
+    ip -o link show | awk -F': ' '{print $2}'
+    separator
+    echo "IP adresy:"
+    ip -o addr show | awk '{print $2, $4}'
+    separator
+    echo "MAC adresy:"
+    ip -o link show | awk '{print $2, $17}'
+    separator
+}
+
+# Funkce pro provedení jednoho ping na adresu beeit.cz
+netTest() {
+    echo "=== Testování spojení s beeit.cz ==="
+    separator
+    ping -c 1 beeit.cz
+    separator
+}
+
 # Zpracování argumentů pomocí getopts
-while getopts ":d:f:s:h:i" opt; do
+while getopts ":d:f:s:h:int" opt; do
     case ${opt} in
         d) create_directory "$OPTARG" ;;
         f) create_file "$OPTARG" ;;
         s) create_soft_link "$OPTARG" "${!OPTIND}"; shift ;;  
         h) create_hard_link "$OPTARG" "${!OPTIND}"; shift ;;  
         i) show_sys_info ;;
+        n) netInfo ;;
+        t) netTest ;;
         \?) echo "Neznámý příkaz: -$OPTARG" >&2; show_help ;;
         :) echo "Chyba: Argument pro -$OPTARG chybí" >&2; show_help ;;
     esac

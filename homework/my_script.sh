@@ -19,6 +19,11 @@ echo -e "$(ifconfig | grep -oP 'broadcast \K\d+\.\d+\.\d+\.\d+' | awk '{print "B
 echo
 echo -e "$(ifconfig | grep -m 1 -oP 'inet6 \K([0-9A-Fa-f:]+)' | awk '{print "IP6v:\t\t" $0}')"
 echo
+echo -e "$(ip route show default | awk '{print "Default gateway: "$3}')"
+echo 
+cat /etc/resolv.conf | grep "nameserver" | awk '{print "nameserver: "$2}'
+
+
 # -oP = vrátí pouze nalezené odpovídající části řádku (ne celý ř) a P umožní \K
 # \K = zahodí vše co je před ether
 # [0-9A-Fa-f] = regulární výraz, který odpovídá hexadecimalnimu znaku

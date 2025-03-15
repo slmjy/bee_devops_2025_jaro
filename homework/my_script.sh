@@ -124,7 +124,7 @@ docker_build_image() {
         echo -e "$(date) $(whoami) \tDocker build image: $IMAGE_NAME:$IMAGE_VERSION byl úspěšný." >> "$LOG_FILE"
         echo
     else
-        echo "❌ ERROR: Build byl neúspěšný!"
+        echo "❌ ERROR: Docker build nebyl úspěšný!"
         echo -e "$(date) $(whoami) \tERROR: Docker build nebyl úspěšný!" >> "$LOG_FILE"
         echo
         exit 1

@@ -1,17 +1,17 @@
-# Použití základního image (NGINX)
-FROM nginx:latest
+# Použití základního image (Python3-slim)
+FROM python:3.12.3-slim
 
 # Nastavení pracovního adresáře uvnitř kontejneru
-WORKDIR /usr/share/nginx/html
+WORKDIR /app
 
-# Provede update
-RUN apt update 
+# Zkopíruju soubor requirements.txt z adresáře, ve kterém se aktuálně nacházím (zajistí tečka na konci)
+COPY requirements.txt .
 
-# Zkopírování vlastního HTML souboru do kontejneru
-COPY index.html .
+# Provede instalaci knihoven ze souboru requirements.txt
+RUN pip install -r requirements.txt 
 
-# Exponujeme port 80 pro přístup k aplikaci
-EXPOSE 80
+# Zkopírování app.py souboru (případně lze použít 2 tečky, to zkopíruje vše z aktuálního adresáře) do kontejneru
+COPY . .
 
-# Spustíme NGINX
-CMD ["nginx", "-g", "daemon off;"]
+# Spustíme Python a app.py
+CMD ["python3", "app.py"]

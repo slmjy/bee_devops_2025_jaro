@@ -4,6 +4,9 @@ FROM nginx:latest
 # Nastavení pracovního adresáře uvnitř kontejneru
 WORKDIR /usr/share/nginx/html
 
+# Provede update
+RUN apt update 
+
 # Zkopírování vlastního HTML souboru do kontejneru
 COPY index.html .
 

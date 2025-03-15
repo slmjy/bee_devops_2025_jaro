@@ -1,0 +1,49 @@
+Thu Mar 13 10:50:33 CET 2025 afejfar 	ERROR: Nedostatečný počet vstupních parametrů.
+Thu Mar 13 10:51:09 CET 2025 afejfar 	ERROR! Musíš zadat správně cestu, kde se má adresář vytvořit.
+Thu Mar 13 10:51:56 CET 2025 afejfar 	ERROR! Musíš zadat správně cestu, kde se má adresář vytvořit.
+Thu Mar 13 10:52:09 CET 2025 afejfar 	Adresář '/tmp/nova_slozka' byl správně vytvořen. Gratuluji.
+Thu Mar 13 10:52:09 CET 2025 afejfar 	Soft link byl vytvořen: /tmp/nazev_souboru_soft
+Thu Mar 13 10:52:09 CET 2025 afejfar 	Hard link byl vytvořen: /tmp/nazev_souboru_hard
+Thu Mar 13 10:53:56 CET 2025 afejfar 	Adresář '/tmp/nova_slozka_2' byl správně vytvořen. Gratuluji.
+Thu Mar 13 10:53:56 CET 2025 afejfar 	Soft link byl vytvořen: /tmp/nazev_soft
+Thu Mar 13 10:53:56 CET 2025 afejfar 	Hard link byl vytvořen: /tmp/nazev_hard
+Thu Mar 13 10:54:45 CET 2025 afejfar 	Adresář '/tmp/nova_slozka_3' byl správně vytvořen. Gratuluji.
+Thu Mar 13 10:54:45 CET 2025 afejfar 	Soft link byl vytvořen: /tmp/nazev_3_soft
+Thu Mar 13 10:54:45 CET 2025 afejfar 	Hard link byl vytvořen: /tmp/nazev_3_hard
+Thu Mar 13 11:37:14 CET 2025 afejfar 	Soft link byl vytvořen: /tmp/_soft
+Thu Mar 13 11:37:14 CET 2025 afejfar 	ERROR: Hard link /tmp/_hard se nepodařilo vytvořit.
+Thu Mar 13 11:42:49 CET 2025 afejfar 	Adresář '/tmp/nova_slozka' byl správně vytvořen. Gratuluji.
+Thu Mar 13 11:42:49 CET 2025 afejfar 	Soubor 'nazev_souboru' byl úspěšně vytvořen v adresáři '/tmp/nova_slozka'.
+Thu Mar 13 11:42:49 CET 2025 afejfar 	Soft link byl vytvořen: /tmp/nazev_souboru_soft
+Thu Mar 13 11:42:49 CET 2025 afejfar 	ERROR: Soft link již existuje.
+Thu Mar 13 11:42:49 CET 2025 afejfar 	Hard link byl vytvořen: /tmp/nazev_souboru_hard
+Thu Mar 13 11:55:14 CET 2025 afejfar 	Adresář '/tmp/nova_slozka2' byl správně vytvořen.
+Thu Mar 13 11:55:14 CET 2025 afejfar 	Soubor 'nazev_souboru2' byl úspěšně vytvořen v adresáři '/tmp/nova_slozka2'.
+Thu Mar 13 11:55:14 CET 2025 afejfar 	Soft link byl vytvořen: /tmp/nazev_souboru2_soft
+Thu Mar 13 11:55:14 CET 2025 afejfar 	Hard link byl vytvořen: /tmp/nazev_souboru2_hard
+Thu Mar 13 11:55:19 CET 2025 afejfar 	ERROR: Adresář /tmp/nova_slozka2 již existuje. Zvol si jiný název.
+Thu Mar 13 11:55:26 CET 2025 afejfar 	Docker image built: my-fastapi-app:5.0
+Thu Mar 13 11:56:40 CET 2025 afejfar 	Docker image built: my-fastapi-app:6.0
+Thu Mar 13 11:56:46 CET 2025 afejfar 	Docker image built: my-fastapi-app:7.0
+Thu Mar 13 11:56:49 CET 2025 afejfar 	ERROR: Adresář /tmp/nova_slozka2 již existuje. Zvol si jiný název.
+Thu Mar 13 12:03:19 CET 2025 afejfar 	ERROR: Adresář /tmp/nova_slozka2 již existuje. Zvol si jiný název.
+Thu Mar 13 12:03:30 CET 2025 afejfar 	Docker build image: my-fastapi-app:8.0 byl úspěšný.
+Thu Mar 13 13:28:41 CET 2025 afejfar 	ERROR: Adresář /tmp/nova_slozka2 již existuje. Zvol si jiný název.
+Thu Mar 13 13:33:58 CET 2025 afejfar 	ERROR: Adresář /tmp/nova_slozka2 již existuje. Zvol si jiný název.
+Thu Mar 13 13:34:23 CET 2025 afejfar 	Docker build image: my-fastapi-app:2.0 byl úspěšný.
+Thu Mar 13 13:36:48 CET 2025 afejfar 	ERROR: 'docker' příkaz neznám.
+Thu Mar 13 13:40:06 CET 2025 afejfar 	Docker build image: my-fastapi-app:3.0 byl úspěšný.
+Thu Mar 13 13:59:57 CET 2025 afejfar 	Docker build image: my-fastapi-app:4.0 byl úspěšný.
+Thu Mar 13 14:01:50 CET 2025 afejfar 	Docker build image: nginx-image:1.0 byl úspěšný.
+Sat Mar 15 19:03:50 CET 2025 afejfar 	ERROR: Docker build nebyl úspěšný!
+Sat Mar 15 19:17:51 CET 2025 afejfar 	Docker build image: nginxx:1.0 byl úspěšný.
+Sat Mar 15 20:03:47 CET 2025 afejfar 	ERROR: Docker image neexistuje.
+Sat Mar 15 20:03:47 CET 2025 afejfar 	ERROR: Docker image nebyl nalezen a tudíž nemůže být odstraněn.
+Sat Mar 15 20:06:34 CET 2025 afejfar 	ERROR: Docker image neexistuje.
+Sat Mar 15 20:06:34 CET 2025 afejfar 	ERROR: Docker image nebyl nalezen a tudíž nemůže být odstraněn.
+Sat Mar 15 20:09:03 CET 2025 afejfar 	ERROR: Docker build nebyl úspěšný!
+Sat Mar 15 20:10:18 CET 2025 afejfar 	Docker build image: nginx:1.0 byl úspěšný.
+Sat Mar 15 20:13:30 CET 2025 afejfar 	Docker build image: nginx:2.0 byl úspěšný.
+Sat Mar 15 20:16:15 CET 2025 afejfar 	Docker image nginx:1.0 byl úspěšně odstraněn.
+Sat Mar 15 20:18:07 CET 2025 afejfar 	ERROR: Příkaz '--show-container' neznám.
+Sat Mar 15 20:23:20 CET 2025 afejfar 	Docker image nginx:2.0 byl úspěšně odstraněn.

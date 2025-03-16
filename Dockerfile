@@ -3,7 +3,8 @@ FROM debian
 COPY . /app
 COPY . /network.sh
 
-#RUN apt install openssl  #--exit code: 100, (oprávnění???)
+RUN apt-get update && apt-get install -y openssl 
+#dát update registry a -y pro automatický souhlas s instalací, jinak ERROR 100 !
 
 RUN apt-get update && apt-get install -y curl
 

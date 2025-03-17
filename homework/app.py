@@ -1,6 +1,6 @@
 import requests
 
-URL = "https://api.github.com"  # Změň na svou cílovou adresu
+URL = "https://beeit.cz/"  
 
 def send_request():
     try:

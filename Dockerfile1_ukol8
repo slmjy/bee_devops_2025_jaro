@@ -1,0 +1,24 @@
+# 1 Stage: Kompilace aplikace
+FROM golang:1.21-alpine AS builder
+WORKDIR /app
+
+# Nainstalujeme zavislosti
+RUN apk add --no-cache git
+
+# Zkopirujeme zdrojovy kod a sestavime binarku
+COPY . .
+RUN go mod tidy && go build -o app
+
+# 2. Stage: Spustitelny kontejner
+FROM alpine:latest
+WORKDIR /app
+
+# Pridame ne-root uzivatele
+RUN adduser -D -g '' appuser
+USER appuser
+
+# Zkopirujeme binarku z predchoziho buildu
+COPY --from=builder /app/app .
+
+# Spustime aplikaci
+CMD ["./app"]

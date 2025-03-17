@@ -54,3 +54,6 @@ Sat Mar 15 21:47:16 CET 2025 afejfar 	ERROR: Docker build nebyl úspěšný!
 Sat Mar 15 21:47:40 CET 2025 afejfar 	ERROR: Docker build nebyl úspěšný!
 Sat Mar 15 21:48:15 CET 2025 afejfar 	ERROR: Docker build nebyl úspěšný!
 Sat Mar 15 21:53:11 CET 2025 afejfar 	Docker build image: python_request:1.0 byl úspěšný.
+Mon Mar 17 14:07:24 CET 2025 afejfar 	Docker build image: python_request:2.0 byl úspěšný.
+Mon Mar 17 15:06:00 CET 2025 afejfar 	Docker image python_request:2.0 byl úspěšně odstraněn.
+Mon Mar 17 15:39:49 CET 2025 afejfar 	Docker build image: python_request:2.0 byl úspěšný.

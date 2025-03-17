@@ -13,5 +13,11 @@ RUN pip install -r requirements.txt
 # Zkopírování app.py souboru (případně lze použít 2 tečky, to zkopíruje vše z aktuálního adresáře) do kontejneru
 COPY . .
 
+# Vytvoření nového uživatele "appuser" ; -m dá domovský adresář userovi; chown změní vlastníka souboru; -R rekurzivně (na složku a její obsah)
+RUN useradd -m appuser && chown -R appuser /app
+
+# Přepnutí na "appuser" -> neběží jako root 
+USER appuser
+
 # Spustíme Python a app.py
 CMD ["python3", "app.py"]

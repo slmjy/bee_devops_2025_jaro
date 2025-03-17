@@ -7,7 +7,7 @@ WORKDIR /app
 COPY requirements.txt .
 
 # Provede instalaci knihoven ze souboru requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt 
+RUN pip install --no-cache-dir --prefix=/install -r requirements.txt 
 
 
 ##############################################################################################################
@@ -19,8 +19,7 @@ FROM python:3.12.3-slim
 WORKDIR /app
 
 # Zkopírování nainstalovaných balíčků z builder stage, ale jen potřebných částí
-COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
-COPY --from=builder /usr/local/bin /usr/local/bin
+COPY --from=builder /install /usr/local
 
 # Zkopírování app.py souboru (případně lze použít 2 tečky, to zkopíruje vše z aktuálního adresáře) do kontejneru
 COPY app.py .

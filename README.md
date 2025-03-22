@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # bee_devops_2025_jaro
 
 1 Ukol:
@@ -7,5 +8,3 @@ Jmenuji se Adam a původem jsem z Brna. Aktuálně žiju na severu Čech a pracu
 - pridat novy commit 
 - udelat git push do sveho forku
 - udelat pull request pres GitHub web do repozitare od Andrey (ten ze kteroh se delal fork). Tlacitko Create Pull Request
-
-

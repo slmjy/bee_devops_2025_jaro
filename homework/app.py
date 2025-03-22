@@ -1,5 +1,6 @@
 import requests
 
+
 URL = "https://beeit.cz/"  
 
 def send_request():
@@ -12,3 +13,6 @@ def send_request():
 
 if __name__ == "__main__":
     send_request()
+
+print("App is running...")
+

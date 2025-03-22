@@ -45,7 +45,7 @@ echo "==========================================================================
 echo
 
 
-# FUNKCE - Nápověda
+### FUNKCE - Nápověda ###
 
 show_help () {
     echo "========================================================================================================================================="
@@ -58,7 +58,7 @@ show_help () {
 }
 
 
-# FUNKCE - Chceš nápovědu ?
+### FUNKCE - Chceš nápovědu ? ###
 
 answer () {
     echo -e "\nAhoj, pro správné chování skriptu musíš postupovat podle jasného zadání.\nChceš získat více informací? [y/n]"
@@ -76,15 +76,15 @@ answer () {
 } 
 
 
-# Vytvoření souboru pro ukládání logů
+### Vytvoření souboru pro ukládání logů ###
 touch ~/bee_homework/app.log
 LOG_FILE="$HOME/bee_homework/app.log"
 
-# Parsování vstupních parametrů a uložení do proměnných
+### Parsování vstupních parametrů a uložení do proměnných ###
 PARAM1="$2"
 PARAM2="$3"
 
-# Uložení cesty pro soft_link && hard_link do proměnných PATH_SOFT && PATH_HARD
+### Uložení cesty pro soft_link && hard_link do proměnných PATH_SOFT && PATH_HARD ###
 PATH_SOFT="/tmp/$3_soft"
 PATH_HARD="/tmp/$3_hard"
 

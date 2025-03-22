@@ -1,3 +1,4 @@
+# Použití BUILDER STAGE
 FROM python:3.12.3 AS builder
 
 # Nastavení pracovního adresáře uvnitř kontejneru
@@ -10,10 +11,10 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --prefix=/install -r requirements.txt 
 
 
-##############################################################################################################
+#######################################################################################################################
 
 
-# Použití základního image (Python3-slim)
+# Použití základního BASE IMAGE (Python3-slim)
 FROM python:3.12.3-slim
 
 WORKDIR /app
@@ -22,7 +23,7 @@ WORKDIR /app
 COPY --from=builder /install /usr/local
 
 # Zkopírování app.py souboru (případně lze použít 2 tečky, to zkopíruje vše z aktuálního adresáře) do kontejneru
-COPY app.py .
+COPY . .
 
 # Vytvoření nového uživatele "appuser" ; -m dá domovský adresář userovi; chown změní vlastníka souboru; -R rekurzivně (na složku a její obsah)
 RUN useradd -m appuser && chown -R appuser /app
@@ -31,4 +32,8 @@ RUN useradd -m appuser && chown -R appuser /app
 USER appuser
 
 # Spustíme Python a app.py
-CMD ["python3", "app.py"]
+# CMD ["python3", "app.py"]
+
+# Spustím za pomocí ENTRYPOINT (například nadefinuji python3, s tím, že při spuštění docker run si definuji už jen spuštění konkrétního skriptu - samozřejmě .py)
+ENTRYPOINT ["python3"]
+# docker run --rm --name runentry image app.py 

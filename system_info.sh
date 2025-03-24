@@ -16,6 +16,10 @@ show_help() {
     echo "  -i               Zobrazí informace o systému."
     echo "  -n               Zobrazí informace o síťových rozhraních."
     echo "  -t               Provede test spojení s beeit.cz."
+    echo "  --build-docker --name <image_name>  Sestaví Docker image z Dockerfile."
+    echo "  --remove-image --image-name <image_name>  Odstraní Docker image."
+    echo "  --remove-image --all  Odstraní všechny Docker images."
+    echo "  --show-container  Zobrazí všechny Docker kontejnery."
     exit 1
 }
 
@@ -119,18 +123,158 @@ netTest() {
     separator
 }
 
-# Zpracování argumentů pomocí getopts
-while getopts ":d:f:s:h:int" opt; do
-    case ${opt} in
-        d) create_directory "$OPTARG" ;;
-        f) create_file "$OPTARG" ;;
-        s) create_soft_link "$OPTARG" "${!OPTIND}"; shift ;;  
-        h) create_hard_link "$OPTARG" "${!OPTIND}"; shift ;;  
-        i) show_sys_info ;;
-        n) netInfo ;;
-        t) netTest ;;
-        \?) echo "Neznámý příkaz: -$OPTARG" >&2; show_help ;;
-        :) echo "Chyba: Argument pro -$OPTARG chybí" >&2; show_help ;;
+# Funkce pro build Docker image
+build_docker() {
+    local image_name=$1
+    
+    if [ ! -f "Dockerfile" ]; then
+        echo "Chyba: Dockerfile nebyl nalezen v aktuálním adresáři." >&2
+        exit 1
+    fi
+    
+    echo "=== Sestavování Docker image ==="
+    separator
+    docker build -t "$image_name" .
+    if [ $? -eq 0 ]; then
+        echo "Docker image '$image_name' byl úspěšně sestaven."
+    else
+        echo "Chyba: Nepodařilo se sestavit Docker image." >&2
+        exit 1
+    fi
+    separator
+}
+
+# Funkce pro odstranění Docker image
+remove_image() {
+    local image_name=$1
+    
+    echo "=== Odstraňování Docker image ==="
+    separator
+    
+    if [ "$image_name" == "--all" ]; then
+        echo "Odstraňuji všechny Docker images..."
+        images=$(docker images -q)
+        if [ -z "$images" ]; then
+            echo "Žádné images k odstranění."
+        else
+            docker rmi -f $images 2>/dev/null || {
+                echo "Varování: Některé images se nepodařilo odstranit (možná jsou používány kontejnery)" >&2
+                echo "Pro smazání všech kontejnerů a images použijte: docker system prune -a" >&2
+            }
+        fi
+    else
+        echo "Odstraňuji image '$image_name'..."
+        if ! docker image inspect "$image_name" &>/dev/null; then
+            echo "Chyba: Image '$image_name' neexistuje." >&2
+            exit 1
+        fi
+        docker rmi "$image_name" || {
+            echo "Chyba: Nepodařilo se odstranit image '$image_name'." >&2
+            echo "Možná je používán běžícím kontejnerem. Zkuste nejprve odstranit kontejnery." >&2
+            exit 1
+        }
+    fi
+    
+    echo "Operace úspěšně dokončena."
+    separator
+}
+
+# Funkce pro zobrazení kontejnerů
+show_containers() {
+    echo "=== Seznam Docker kontejnerů ==="
+    separator
+    echo "Běžící kontejnery:"
+    docker ps
+    separator
+    echo "Všechny kontejnery (běžící i stopnuté):"
+    docker ps -a
+    separator
+}
+
+# Detekce, jestli máme argumenty
+if [ $# -eq 0 ]; then
+    show_help
+fi
+
+# První zpracujeme dlouhé argumenty
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --build-docker)
+            if [[ $# -lt 3 || "$2" != "--name" ]]; then
+                echo "Chyba: Chybí název image. Použijte: --build-docker --name <image_name>" >&2
+                exit 1
+            fi
+            build_docker "$3"
+            shift 3
+            ;;
+        --remove-image)
+            if [[ $# -lt 2 ]]; then
+                echo "Chyba: Neplatný argument pro --remove-image" >&2
+                exit 1
+            fi
+            case "$2" in
+                --image-name)
+                    if [[ $# -lt 3 ]]; then
+                        echo "Chyba: Chybí název image. Použijte: --remove-image --image-name <image_name>" >&2
+                        exit 1
+                    fi
+                    remove_image "$3"
+                    shift 3
+                    ;;
+                --all)
+                    remove_image "--all"
+                    shift 2
+                    ;;
+                *)
+                    echo "Chyba: Neplatný argument pro --remove-image" >&2
+                    exit 1
+                    ;;
+            esac
+            ;;
+        --show-container)
+            show_containers
+            shift
+            ;;
+        --help)
+            show_help
+            ;;
+        -*) # Přepneme na zpracování krátkých argumentů
+            # Zpracování krátkých argumentů pomocí getopts
+            OPTIND=1  # Reset getopts
+            while getopts ":d:f:s:h:int" opt; do
+                case ${opt} in
+                    d) create_directory "$OPTARG" ;;
+                    f) create_file "$OPTARG" ;;
+                    s) 
+                       if [[ $# -lt 3 ]]; then
+                           echo "Chyba: Argument pro -s chybí cíl" >&2 
+                           show_help
+                       fi
+                       create_soft_link "$OPTARG" "$3"
+                       shift 2
+                       ;;  
+                    h) 
+                       if [[ $# -lt 3 ]]; then
+                           echo "Chyba: Argument pro -h chybí cíl" >&2
+                           show_help
+                       fi
+                       create_hard_link "$OPTARG" "$3" 
+                       shift 2
+                       ;;  
+                    i) show_sys_info ;;
+                    n) netInfo ;;
+                    t) netTest ;;
+                    \?) echo "Neznámý příkaz: -$OPTARG" >&2; show_help ;;
+                    :) echo "Chyba: Argument pro -$OPTARG chybí" >&2; show_help ;;
+                esac
+            done
+            shift $((OPTIND-1))
+            ;;
+        *)
+            echo "Neznámý příkaz: $1" >&2
+            show_help
+            exit 1
+            ;;
     esac
 done
 

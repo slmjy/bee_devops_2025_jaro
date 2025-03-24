@@ -1,58 +1,30 @@
-FROM php:8.3-fpm
+# Build stage
+FROM alpine:latest as builder
 
-ARG user
-ARG uid
-ARG laravel_env
+WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    libzip-dev \
-    zip \
-    unzip \
-    postgresql \
-    postgresql-client \
-    libpq-dev \
-    jpegoptim  \
-    optipng  \
-    pngquant  \
-    gifsicle \
-    libc-client-dev \
-    libkrb5-dev
+# Instalace build nástrojů a lsb-release pro použití lsb_release
+RUN apk add --no-cache build-base lsb-release \
+    && echo "int main() { return 0; }" > dummy.c \
+    && gcc -o dummy dummy.c \
+    && lsb-release \
+    && rm -rf /var/cache/apk/*  # Čistíme cache balíčků pro menší obraz
 
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+# Runtime stage
+FROM alpine:latest
 
-# Install PHP extensions
-RUN docker-php-ext-install pdo_pgsql mbstring exif pcntl bcmath gd zip
-RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl
-RUN docker-php-ext-install imap
+WORKDIR /app
 
-# install xdebug only when on local env
-RUN if [ "$laravel_env" = "local" ]; then \
-	pecl install xdebug-3.4.1 && docker-php-ext-enable xdebug \
-	; fi
+# Kopírování výsledného souboru z build fáze
+COPY --from=builder /app/dummy .
 
-# Get latest Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Vytvoření non-root uživatele
+RUN addgroup -S appgroup && \
+    adduser -S appuser -G appgroup && \
+    chown -R appuser:appgroup /app
 
-# Copy php.ini configuration
-COPY docker-compose/php.ini /usr/local/etc/php/php.ini
+# Nastavení uživatele pro spuštění aplikace
+USER appuser
 
-# Create system user to run Composer and Artisan Commands
-RUN useradd -G www-data,root -u $uid -d /home/$user $user
-RUN mkdir -p /home/$user/.composer && \
-    chown -R $user:$user /home/$user && \
-    chown -R $uid:$uid /var/www
-
-ARG NODE_VERSION="18.18.2"
-RUN curl https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz | tar -xz -C /usr/local --strip-components 1
-
-# Set working directory
-WORKDIR /var/www
-
-USER $user
+# Výchozí příkaz
+CMD ["./dummy"]

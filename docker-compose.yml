@@ -1,50 +1,18 @@
-services:
-  app:
-    build:
-      args:
-        user: laravel
-        uid: 1000
-        laravel_env: ${APP_ENV}
-      context: ./
-      dockerfile: Dockerfile
-    image: laravel-steel
-    container_name: steel-app
-    restart: unless-stopped
-    working_dir: /var/www
-    volumes:
-      - ./:/var/www
-      - ./docker-compose/php.ini:/usr/local/etc/php/php.ini
-      - ./docker-compose/php-fpm/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
-    environment:
-      PHP_IDE_CONFIG: "serverName=localhost"
-    networks:
-      - steel-network
-  db:
-    image: postgres:14-alpine
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_DATABASE}
-    ports:
-      - "127.0.0.1:${DB_PORT:-5432}:${DB_PORT:-5432}"
-    volumes:
-      - ./docker-compose/dbdata/data/:/var/lib/postgresql/data/
-      - ./docker-compose/dbdump:/tmp/dump
-    networks:
-      - steel-network
-  nginx:
-    image: nginx:1.17-alpine
-    container_name: steel-nginx
-    restart: unless-stopped
-    ports:
-      - "127.0.0.1:${DOCKER_NGINX_PORT:-8080}:80"
-    volumes:
-      - ./:/var/www
-      - ./docker-compose/nginx:/etc/nginx/conf.d
-    networks:
-      - steel-network
+version: '3.8'
 
-networks:
-  steel-network:
-    driver: bridge
+services:
+  cli-app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: bee-cli-app
+    container_name: bee-cli-container
+    volumes:
+      - .:/app
+    working_dir: /app
+    tty: true
+    user: appuser
+    environment:
+      - DEVCONTAINER=true
+    stdin_open: true
+    privileged: true

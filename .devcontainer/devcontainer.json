@@ -1,0 +1,42 @@
+{
+    "name": "Bash CLI Development Environment",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+    },
+    
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {
+            "version": "latest",
+            "moby": true
+        },
+        "ghcr.io/devcontainers/features/github-cli:1": {},
+        "ghcr.io/devcontainers/features/common-utils:2": {
+            "installZsh": false,
+            "username": "vscode",
+            "uid": 1000,
+            "gid": 1000,
+            "upgradePackages": true
+        }
+    },
+
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "mads-hartmann.bash-ide-vscode",
+                "timonwong.shellcheck",
+                "ms-azuretools.vscode-docker"
+            ],
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": "bash",
+                "bashIde.pathBashCompletion": "/usr/share/bash-completion/bash_completion"
+            }
+        }
+    },
+
+    "postCreateCommand": "git config --global pull.rebase true && apt-get update && apt-get install -y iproute2 lsb-release && echo 'Dev container ready!'",
+    
+    "remoteUser": "vscode",
+    "workspaceMount": "source=${localWorkspaceFolder},target=/app,type=bind",
+    "workspaceFolder": "/app"
+}

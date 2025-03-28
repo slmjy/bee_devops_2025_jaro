@@ -32,7 +32,7 @@ RUN useradd -m appuser && chown -R appuser /app
 USER appuser
 
 # Spustíme Python a app.py
-# CMD ["python3", "app.py"]
+#CMD ["python3", "app.py", "--help"]
 
 # Spustím za pomocí ENTRYPOINT (například nadefinuji python3, s tím, že při spuštění docker run si definuji už jen spuštění konkrétního skriptu - samozřejmě .py)
 ENTRYPOINT ["python3"]

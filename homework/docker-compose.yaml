@@ -1,0 +1,6 @@
+services:
+  app:                    
+    build: .              # zbuildi vse co je v aktualnim adresari, takze dockerfile
+    command: main.py --help   # v dockerfile je nastaven entrypoint pro parametr, takze tady poustim main.py tak se spusti na python3, ktery v entrypoint - mohu napsat i app.py
+    ports:               
+      - "8080:80"         # kontejner bezi na portu 80 a hostitel na portu 8080, tudiz pokud si pustim localhost:8080 tak tam pobezi index.html
